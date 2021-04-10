@@ -1,0 +1,90 @@
+const Product= require('../models/product');
+
+const Cart=require('../models/cart');
+
+exports.getProducts = (req, res, next) => {
+  Product.fetchAll(products => {
+    res.render('shop/product-list', {
+      prods: products,
+      pageTitle: 'All Products',
+      path: '/products'
+    });
+  });
+};
+{"_id":{"$oid":"600711cbb5c65e3751008bda"},"name":"Abhi","emailid":"sidabhi23@gmail.com"}
+exports.getproductdetails=(req,res,next)=>{
+   const prodid=req.params.productid;
+   Product.findbyid(prodid,product=>{
+     res.render('shop/product-detail',{
+     product:product,
+     pageTitle:product.title,
+     path:'/admin/products'}
+     )
+     })
+};
+
+exports.getIndex = (req, res, next) => {
+  Product.fetchAll((products) =>{
+    res.render('shop/index', {
+      prods: products,
+      pageTitle: 'Shop',
+      path: '/'
+    });
+  });
+};
+
+exports.getCart = (req, res, next) => {
+  res.render('shop/cart', {
+    path: '/cart',
+    pageTitle: 'Your Cart'
+    
+  });
+};
+
+exports.postcart=(req,res,next)=>{
+const prodids=req.body.productid;
+Product.findbyid(prodids,product=>{
+Cart.addproduct(prodids,product.price);
+})
+res.redirect('/cart')
+}
+
+exports.getOrders = (req, res, next) => {
+  res.render('shop/orders', {
+    path: '/orders',
+    pageTitle: 'Your Orders'
+  });
+};
+
+exports.getCheckout = (req, res, next) => {
+  res.render('shop/checkout', {
+    path: '/checkout',
+    pageTitle: 'Checkout'
+  });
+};
+//   let newquantity=1;
+//   req.user.getCart().then(cart=>{
+//     const fetchedcart=cart;
+//     //checking if product is available in cart
+//     cart.getProducts({where:{id:prodid}}).then(products=>{
+//       let product;
+//       if(products.length>0){//if product is in cart
+//         product=products[0];
+//       }
+//       if(product){//if we have product in cart we increase its quantity
+//         const oldquantity=product.cartItem.quantity;
+//         newquantity=oldquantity+1;
+//         return product;
+//       }
+//       return Product.findByPk(prodid);//now finding product in Products model
+//     })
+//     .then(product=>{//if we get product that is sure
+//       return fetchedcart.addProduct(product,{//now adding product in card through cartitem
+//         through:{quantity:newquantity}
+//       })
+//     }).then(()=>{
+//       res.redirect('/cart');
+//     })
+    
+//   }).catch(err=>{console.log("error")})
+// };

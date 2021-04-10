@@ -1,0 +1,24 @@
+db.execute('SELECT * FROM products')
+.then((result)=>{
+    console.log(result[0]);
+})
+.catch(err=>{
+    console.log(err);
+});
+
+
+const mysql= require('mysql2');
+
+const pool = mysql.createPool({
+    host:'localhost',
+    user: 'root',
+    database:'node-complete',
+    password:'123456789'
+})
+
+module.exports = pool.promise();
+
+installed mysql2 and t0 connect with our database there is inbuild function in mysql.createPool()//using createpool beacuase everytime we register
+a query we need to close that query and createpool automatic does that for us and return new query everytime
+
+then we use promise with pool beacuse we first want to read our data then execute then function or catch if error occurs
